@@ -19,6 +19,12 @@ fi
 cd /opt/banking
 chmod +x laravel/docker-entrypoint.sh
 
+docker run --rm \
+  -v /opt/banking/laravel:/app \
+  -w /app \
+  composer:2 \
+  install --no-interaction --prefer-dist --optimize-autoloader
+
 if docker compose version >/dev/null 2>&1; then
   docker compose up -d --build
 else

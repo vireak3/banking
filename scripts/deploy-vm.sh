@@ -13,7 +13,9 @@ docker run --rm \
   install --no-interaction --prefer-dist --optimize-autoloader
 
 if docker compose version >/dev/null 2>&1; then
+  docker compose down --remove-orphans || true
   docker compose up -d --build
 else
+  docker-compose down --remove-orphans || true
   docker-compose up -d --build
 fi

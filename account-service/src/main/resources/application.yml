@@ -1,0 +1,26 @@
+server:
+  port: ${SERVER_PORT:8081}
+
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/banking_accounts}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+    show-sql: false
+
+jwt:
+  secret: ${JWT_SECRET:your-secret-key-minimum-256-bits-long-for-jwt-security-validation-change-in-production}
+  expiration: ${JWT_EXPIRATION:3600000}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    config-url: /spring/accounts/v3/api-docs/swagger-config
+    url: /spring/accounts/v3/api-docs
+    oauth2-redirect-url: /spring/accounts/swagger-ui/oauth2-redirect.html
+  api-docs:
+    path: /v3/api-docs

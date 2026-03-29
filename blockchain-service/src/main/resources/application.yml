@@ -1,0 +1,16 @@
+server:
+  port: ${SERVER_PORT:8083}
+
+jwt:
+  secret: ${JWT_SECRET:your-secret-key-minimum-256-bits-long-for-jwt-security-validation-change-in-production}
+  expiration: ${JWT_EXPIRATION:3600000}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    config-url: /spring/blockchain/v3/api-docs/swagger-config
+    url: /spring/blockchain/v3/api-docs
+    oauth2-redirect-url: /spring/blockchain/swagger-ui/oauth2-redirect.html
+  api-docs:
+    path: /v3/api-docs

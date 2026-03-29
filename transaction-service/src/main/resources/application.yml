@@ -1,0 +1,30 @@
+server:
+  port: ${SERVER_PORT:8082}
+
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/banking_transactions}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+    show-sql: false
+
+services:
+  account-url: ${ACCOUNT_SERVICE_URL:http://localhost:8081}
+  blockchain-url: ${BLOCKCHAIN_SERVICE_URL:http://localhost:8083}
+
+jwt:
+  secret: ${JWT_SECRET:your-secret-key-minimum-256-bits-long-for-jwt-security-validation-change-in-production}
+  expiration: ${JWT_EXPIRATION:3600000}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    config-url: /spring/transactions/v3/api-docs/swagger-config
+    url: /spring/transactions/v3/api-docs
+    oauth2-redirect-url: /spring/transactions/swagger-ui/oauth2-redirect.html
+  api-docs:
+    path: /v3/api-docs

@@ -1,0 +1,148 @@
+services:
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./laravel:/var/www/html:ro
+    depends_on:
+      - nextjs
+      - laravel
+      - account-service
+      - transaction-service
+      - blockchain-service
+    networks:
+      - banking-net
+
+  nextjs:
+    build:
+      context: ./nextjs
+      dockerfile: Dockerfile
+    container_name: nextjs
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_API_BASE_URL: http://localhost/api
+    ports:
+      - "3000:3000"
+    depends_on:
+      - laravel
+    networks:
+      - banking-net
+
+  laravel:
+    build:
+      context: ./laravel
+      dockerfile: Dockerfile
+    container_name: laravel
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: http://localhost
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: banking_laravel
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      CACHE_STORE: redis
+      QUEUE_CONNECTION: redis
+      REDIS_HOST: redis
+      SPRING_ACCOUNT_URL: http://account-service:8081
+      SPRING_TRANSACTION_URL: http://transaction-service:8082
+      SPRING_BLOCKCHAIN_URL: http://blockchain-service:8083
+    volumes:
+      - ./laravel:/var/www/html
+    depends_on:
+      - postgres
+      - redis
+      - account-service
+      - transaction-service
+      - blockchain-service
+    networks:
+      - banking-net
+
+  account-service:
+    build:
+      context: ./account-service
+      dockerfile: Dockerfile
+    container_name: account-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/banking_accounts
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SERVER_PORT: 8081
+      JWT_SECRET: your-secret-key-minimum-256-bits-long-for-jwt-security-validation-change-in-production
+      JWT_EXPIRATION: 3600000
+    depends_on:
+      - postgres
+    networks:
+      - banking-net
+
+  transaction-service:
+    build:
+      context: ./transaction-service
+      dockerfile: Dockerfile
+    container_name: transaction-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/banking_transactions
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SERVER_PORT: 8082
+      ACCOUNT_SERVICE_URL: http://account-service:8081
+      BLOCKCHAIN_SERVICE_URL: http://blockchain-service:8083
+      JWT_SECRET: your-secret-key-minimum-256-bits-long-for-jwt-security-validation-change-in-production
+      JWT_EXPIRATION: 3600000
+    depends_on:
+      - postgres
+      - account-service
+      - blockchain-service
+    networks:
+      - banking-net
+
+  blockchain-service:
+    build:
+      context: ./blockchain-service
+      dockerfile: Dockerfile
+    container_name: blockchain-service
+    environment:
+      SERVER_PORT: 8083
+      JWT_SECRET: your-secret-key-minimum-256-bits-long-for-jwt-security-validation-change-in-production
+      JWT_EXPIRATION: 3600000
+    networks:
+      - banking-net
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: banking_laravel
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "5432:5432"
+    networks:
+      - banking-net
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - banking-net
+
+volumes:
+  postgres_data:
+
+networks:
+  banking-net:
+    driver: bridge

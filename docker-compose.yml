@@ -25,7 +25,7 @@ services:
     container_name: nextjs
     environment:
       NODE_ENV: production
-      NEXT_PUBLIC_API_BASE_URL: http://localhost/api
+      NEXT_PUBLIC_API_BASE_URL: /api
     ports:
       - "3000:3000"
     depends_on:

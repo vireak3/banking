@@ -130,7 +130,7 @@ export default function LoginPage() {
 
           <div className="mt-8 flex flex-col gap-3 rounded-[1.6rem] bg-[linear-gradient(180deg,rgba(31,95,255,0.08),rgba(255,255,255,0.85))] px-5 py-5 text-sm text-[var(--color-text-muted)] sm:flex-row sm:items-center sm:justify-between">
             <span>Need the API details?</span>
-            <Link href="http://localhost/spring/accounts/swagger-ui.html" className="font-semibold text-[var(--color-primary)]">
+            <Link href="/spring/accounts/swagger-ui.html" className="font-semibold text-[var(--color-primary)]">
               Open Swagger
             </Link>
           </div>

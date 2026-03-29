@@ -1,7 +1,7 @@
 import { clearStoredAuth, getStoredToken } from "@/lib/auth";
 import type { ApiEnvelope } from "@/types/banking";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost/api";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "/api";
 
 export class ApiError extends Error {
   status: number;

@@ -20,11 +20,11 @@ public class BankTransaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "from_account", nullable = false)
-    private Long fromAccount;
+    @Column(name = "from_account", nullable = false, length = 9)
+    private String fromAccount;
 
-    @Column(name = "to_account", nullable = false)
-    private Long toAccount;
+    @Column(name = "to_account", nullable = false, length = 9)
+    private String toAccount;
 
     @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal amount;
@@ -50,19 +50,19 @@ public class BankTransaction {
         return id;
     }
 
-    public Long getFromAccount() {
+    public String getFromAccount() {
         return fromAccount;
     }
 
-    public void setFromAccount(Long fromAccount) {
+    public void setFromAccount(String fromAccount) {
         this.fromAccount = fromAccount;
     }
 
-    public Long getToAccount() {
+    public String getToAccount() {
         return toAccount;
     }
 
-    public void setToAccount(Long toAccount) {
+    public void setToAccount(String toAccount) {
         this.toAccount = toAccount;
     }
 

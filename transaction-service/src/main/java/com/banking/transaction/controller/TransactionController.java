@@ -40,7 +40,7 @@ public class TransactionController {
 
     @GetMapping("/{accountId}")
     @Operation(summary = "List account transactions", description = "Retrieves all transactions for an account")
-    public ResponseEntity<ApiResponse<List<TransferResponse>>> byAccount(@PathVariable Long accountId) {
+    public ResponseEntity<ApiResponse<List<TransferResponse>>> byAccount(@PathVariable String accountId) {
         return ResponseEntity.ok(ApiResponse.success(transactionService.findByAccount(accountId), "Transactions fetched"));
     }
 }

@@ -31,7 +31,7 @@ public class AccountClient {
         this.accountServiceUrl = accountServiceUrl;
     }
 
-    public BigDecimal fetchBalance(Long accountId) {
+    public BigDecimal fetchBalance(String accountId) {
         String url = accountServiceUrl + "/accounts/" + accountId;
         HttpEntity<Void> request = new HttpEntity<>(authHeaders());
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
@@ -39,7 +39,7 @@ public class AccountClient {
         return root.path("data").path("balance").decimalValue();
     }
 
-    public void adjustBalance(Long accountId, BigDecimal delta) {
+    public void adjustBalance(String accountId, BigDecimal delta) {
         String url = accountServiceUrl + "/accounts/" + accountId + "/balance";
         HttpEntity<AdjustBalanceRequest> request = new HttpEntity<>(new AdjustBalanceRequest(delta), authHeaders());
         restTemplate.exchange(url, HttpMethod.PUT, request, String.class);

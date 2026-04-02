@@ -6,8 +6,8 @@ import java.time.Instant;
 
 public record TransferResponse(
     Long id,
-    Long fromAccount,
-    Long toAccount,
+    String fromAccount,
+    String toAccount,
     BigDecimal amount,
     String blockchainHash,
     TransactionStatus status,

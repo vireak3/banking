@@ -66,7 +66,7 @@ public class TransactionService {
         return toResponse(saved);
     }
 
-    public List<TransferResponse> findByAccount(Long accountId) {
+    public List<TransferResponse> findByAccount(String accountId) {
         return repository.findByFromAccountOrToAccountOrderByCreatedAtDesc(accountId, accountId)
             .stream()
             .map(this::toResponse)

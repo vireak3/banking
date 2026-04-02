@@ -42,7 +42,7 @@ public class AccountController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Retrieve account by ID", description = "Fetches account details including current balance")
-    public ResponseEntity<ApiResponse<AccountResponse>> getById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<AccountResponse>> getById(@PathVariable String id) {
         return ResponseEntity.ok(ApiResponse.success(accountService.getAccount(id), "Account fetched"));
     }
 
@@ -55,7 +55,7 @@ public class AccountController {
     @PutMapping("/{id}/balance")
     @Operation(summary = "Adjust account balance", description = "Internal endpoint to adjust account balance (used during transfers)")
     public ResponseEntity<ApiResponse<AccountResponse>> adjustBalance(
-        @PathVariable Long id,
+        @PathVariable String id,
         @Valid @RequestBody AdjustBalanceRequest request
     ) {
         AccountResponse response = accountService.adjustBalance(id, request.getDelta());

@@ -29,13 +29,14 @@ public class AccountService {
         Account account = new Account();
         account.setUserId(request.getUserId());
         account.setBalance(request.getBalance());
+        account.generateAccountNumber();
         Account saved = accountRepository.save(account);
         return toResponse(saved);
     }
 
-    public AccountResponse getAccount(Long id) {
-        Account account = accountRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Account not found: " + id));
+    public AccountResponse getAccount(String accountNumber) {
+        Account account = accountRepository.findByAccountNumber(accountNumber)
+            .orElseThrow(() -> new NotFoundException("Account not found: " + accountNumber));
         return toResponse(account);
     }
 
@@ -44,9 +45,9 @@ public class AccountService {
     }
 
     @Transactional
-    public AccountResponse adjustBalance(Long id, BigDecimal delta) {
-        Account account = accountRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Account not found: " + id));
+    public AccountResponse adjustBalance(String accountNumber, BigDecimal delta) {
+        Account account = accountRepository.findByAccountNumber(accountNumber)
+            .orElseThrow(() -> new NotFoundException("Account not found: " + accountNumber));
 
         BigDecimal newBalance = account.getBalance().add(delta);
         if (newBalance.compareTo(BigDecimal.ZERO) < 0) {
@@ -59,6 +60,6 @@ public class AccountService {
     }
 
     private AccountResponse toResponse(Account account) {
-        return new AccountResponse(account.getId(), account.getUserId(), account.getBalance());
+        return new AccountResponse(account.getAccountNumber(), account.getUserId(), account.getBalance());
     }
 }

@@ -31,11 +31,11 @@ public class BlockchainClient {
         this.blockchainServiceUrl = blockchainServiceUrl;
     }
 
-    public String generateHash(Long from, Long to, BigDecimal amount, Instant timestamp) {
+    public String generateHash(String from, String to, BigDecimal amount, Instant timestamp) {
         String url = blockchainServiceUrl + "/blockchain/hash";
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(Map.of(
-            "from", String.valueOf(from),
-            "to", String.valueOf(to),
+            "from", from,
+            "to", to,
             "amount", amount,
             "timestamp", timestamp.toEpochMilli()
         ), authHeaders());
